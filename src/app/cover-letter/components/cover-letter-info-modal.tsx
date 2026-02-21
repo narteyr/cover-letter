@@ -6,7 +6,7 @@ import { Button } from "@/components/base/buttons/button";
 import { CloseButton } from "@/components/base/buttons/close-button";
 import { Label } from "@/components/base/input/label";
 import { TextAreaBase } from "@/components/base/textarea/textarea";
-import { MagicWand01, File05, ChevronDown } from "@untitledui/icons";
+import { MagicWand01, File05, ChevronDown, Upload01, CheckCircle } from "@untitledui/icons";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -120,6 +120,12 @@ export function CoverLetterInfoModal({
     const [extraContext, setExtraContext] = useState("");
     const [showExtra, setShowExtra] = useState(false);
 
+    // Resume upload state
+    const [resumeFile, setResumeFile] = useState<File | null>(null);
+    const [isParsingResume, setIsParsingResume] = useState(false);
+    const [resumeParseError, setResumeParseError] = useState("");
+    const [parsedResumeData, setParsedResumeData] = useState<Partial<CoverLetterFormData> | null>(null);
+
     // Re-seed visible fields when modal opens
     useEffect(() => {
         if (isOpen) {
@@ -128,19 +134,76 @@ export function CoverLetterInfoModal({
             setJobDescription(initialValues?.jobDescription ?? "");
             setExtraContext(initialValues?.extraContext ?? "");
             setShowExtra(false);
+            // Reset resume upload state
+            setResumeFile(null);
+            setIsParsingResume(false);
+            setResumeParseError("");
+            setParsedResumeData(null);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
+
+    // Handle resume file upload
+    async function handleResumeUpload(file: File) {
+        setResumeFile(file);
+        setIsParsingResume(true);
+        setResumeParseError("");
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch("/api/parse-resume", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Failed to parse resume");
+            }
+
+            const parsed = await response.json();
+
+            // Map the API response to our form data structure
+            const resumeData: Partial<CoverLetterFormData> = {
+                candidateName: parsed.candidateName,
+                candidateEmail: parsed.candidateEmail,
+                candidatePhone: parsed.candidatePhone,
+                candidateAddress: parsed.candidateAddress,
+                yearsOfExperience: parsed.yearsOfExperience,
+                topAchievements: parsed.topAchievements,
+                relevantSkills: parsed.relevantSkills,
+            };
+
+            setParsedResumeData(resumeData);
+        } catch (error: any) {
+            console.error("Resume parse error:", error);
+            setResumeParseError(error.message || "Failed to parse resume");
+            setResumeFile(null);
+        } finally {
+            setIsParsingResume(false);
+        }
+    }
 
     const canSubmit = companyName.trim() && jobTitle.trim() && jobDescription.trim();
 
     function handleSubmit() {
         if (!canSubmit) return;
 
-        // Merge: user-visible fields + auto-filled background + static fallbacks
-        // Priority: initialValues (from resume) when non-empty > STATIC_BACKGROUND
+        // Merge: parsed resume data > initialValues > static fallbacks
+        // Priority: parsedResumeData (from uploaded resume) > initialValues (from profile) > STATIC_BACKGROUND
         const background: Partial<CoverLetterFormData> = { ...STATIC_BACKGROUND };
+
+        // First apply initialValues
         for (const [k, v] of Object.entries(initialValues ?? {})) {
+            if (v != null && String(v).trim() !== "") {
+                (background as Record<string, unknown>)[k] = v;
+            }
+        }
+
+        // Then apply parsedResumeData (higher priority)
+        for (const [k, v] of Object.entries(parsedResumeData ?? {})) {
             if (v != null && String(v).trim() !== "") {
                 (background as Record<string, unknown>)[k] = v;
             }
@@ -200,6 +263,63 @@ export function CoverLetterInfoModal({
 
                             {/* ── Body ── */}
                             <div className="flex flex-col gap-5 px-6 pt-5 pb-2 overflow-y-auto max-h-[68vh]">
+
+                                {/* Resume Upload Section */}
+                                <div className="flex flex-col gap-3">
+                                    <Label>Upload your resume (optional)</Label>
+                                    <div className="relative">
+                                        <input
+                                            type="file"
+                                            accept=".pdf,.doc,.docx"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) handleResumeUpload(file);
+                                            }}
+                                            className="hidden"
+                                            id="resume-upload"
+                                            disabled={isParsingResume}
+                                        />
+                                        <label
+                                            htmlFor="resume-upload"
+                                            className={`flex items-center justify-center gap-2 w-full rounded-lg border-2 border-dashed px-4 py-6 cursor-pointer transition-colors ${
+                                                resumeFile
+                                                    ? "border-utility-success-300 bg-utility-success-50"
+                                                    : "border-secondary bg-subtle hover:border-primary hover:bg-primary"
+                                            } ${isParsingResume ? "opacity-50 cursor-not-allowed" : ""}`}
+                                        >
+                                            {isParsingResume ? (
+                                                <>
+                                                    <div className="size-5 border-2 border-brand-300 border-t-transparent rounded-full animate-spin" />
+                                                    <span className="text-sm text-secondary">Parsing resume...</span>
+                                                </>
+                                            ) : resumeFile ? (
+                                                <>
+                                                    <CheckCircle className="size-5 text-utility-success-600" />
+                                                    <span className="text-sm font-medium text-utility-success-700">
+                                                        {resumeFile.name}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload01 className="size-5 text-tertiary" />
+                                                    <span className="text-sm text-secondary">
+                                                        Click to upload PDF or Word document
+                                                    </span>
+                                                </>
+                                            )}
+                                        </label>
+                                    </div>
+                                    {resumeParseError && (
+                                        <p className="text-sm text-error">{resumeParseError}</p>
+                                    )}
+                                    {parsedResumeData && (
+                                        <div className="rounded-lg bg-utility-success-50 border border-utility-success-200 p-3">
+                                            <p className="text-xs text-utility-success-700 font-medium">
+                                                ✓ Resume parsed successfully! Your background info will be used in the cover letter.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
 
                                 {/* Company + Role — side by side */}
                                 <div className="grid grid-cols-2 gap-3">
