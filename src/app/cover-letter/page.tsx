@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import EditorHeader from "../resume-book/components/editor-header";
+import EditorHeader from "./components/editor-header";
 import { CoverLetterEditor } from "./components/cover-letter-editor";
 import { CoverLetterWritingTips } from "./components/cover-letter-writing-tips";
 import { CoverLetterMetrics } from "./components/cover-letter-metrics";
@@ -97,15 +97,12 @@ const CoverLetterPageContent = () => {
                           ? "Generating…"
                           : "Create your cover letter"
                 }
-                jobs={mockJobs}
-                selectedJobId={selectedJobId}
-                onJobSelect={(id) => setSelectedJobId(id)}
                 onRecommendationsOpen={() => setSidebarOpen((open) => !open)}
                 onDownload={handleDownload}
                 viewMode={viewMode}
                 onViewModeChange={setViewMode}
                 suggestionsCount={0}
-                homeHref="/home"
+                homeHref="/"
                 showConstraintMeter={false}
             />
 

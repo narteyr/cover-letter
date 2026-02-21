@@ -26,6 +26,17 @@ export default function LandingPage() {
             <h1 className="text-3xl font-normal text-brand-700" style={{ fontFamily: 'var(--font-changa-one)' }}>internaly.</h1>
           </div>
         </Link>
+        <nav className="flex items-center gap-6">
+          <Link
+            href="/contact"
+            className="text-sm font-medium text-secondary hover:text-primary transition-colors"
+          >
+            Contact Us
+          </Link>
+          <Button href="/cover-letter" size="md" color="primary">
+            Get started
+          </Button>
+        </nav>
       </header>
 
       {/* Hero - gradient background */}
