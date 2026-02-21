@@ -1,9 +1,9 @@
 /**
- * Server-side PDF parser wrapper
+ * Server-side PDF parser wrapper using LangChain PDFLoader
  * This file should only be imported in API routes (server-side only)
- * to prevent pdf-parse from running during build
  */
 
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import type { Buffer } from "node:buffer";
 
 export interface PdfData {
@@ -12,11 +12,26 @@ export interface PdfData {
 }
 
 /**
- * Parse PDF buffer and extract text
- * This lazy-loads pdf-parse only when actually called at runtime
+ * Parse PDF buffer and extract text using LangChain PDFLoader
  */
 export async function parsePdfBuffer(buffer: Buffer): Promise<PdfData> {
-  // Dynamic import to prevent pdf-parse from loading during build
-  const pdfParse = await import("pdf-parse").then((mod) => mod.default);
-  return await pdfParse(buffer);
+  // Convert Buffer to Blob for PDFLoader
+  // Use buffer's underlying ArrayBuffer and ensure it's an ArrayBuffer (not SharedArrayBuffer)
+  const arrayBuffer = buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength
+  ) as ArrayBuffer;
+  const blob = new Blob([arrayBuffer], { type: "application/pdf" });
+
+  // PDFLoader can work with Blob objects
+  const loader = new PDFLoader(blob);
+  const docs = await loader.load();
+
+  // Combine all document pages into a single text string
+  const text = docs.map((doc) => doc.pageContent).join("\n\n");
+
+  return {
+    text,
+    numpages: docs.length,
+  };
 }

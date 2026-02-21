@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@internationalized/date": "^3.11.0",
+    "@langchain/community": "^1.1.17",
     "@langchain/core": "^0.3.58",
     "@langchain/openai": "^0.3.16",
     "@react-stately/utils": "^3.11.0",
@@ -39,7 +40,7 @@
     "motion": "^11.0.0",
     "next": "^16.1.1",
     "openai": "^4.77.3",
-    "pdf-parse": "1.1.1",
+    "pdf-parse": "1.1.4",
     "react": "^19.0.0",
     "react-aria": "^3.31.0",
     "react-aria-components": "^1.13.0",

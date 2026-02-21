@@ -89,6 +89,13 @@ Parse the resume and return the extracted information in the specified format.`
   });
 
   const response = await model.invoke(input);
+
+  // Debug: log response structure to understand what's being returned
+  if (!response || typeof response.content === 'undefined') {
+    console.error('[Parse Resume] Unexpected response structure:', JSON.stringify(response, null, 2));
+    throw new Error('Invalid response from AI model - no content returned');
+  }
+
   const parsed = await parser.parse(response.content as string);
 
   return parsed;
