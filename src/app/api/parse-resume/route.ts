@@ -88,7 +88,18 @@ Parse the resume and return the extracted information in the specified format.`
     resume_text: resumeText,
   });
 
-  const response = await model.invoke(input);
+  let response;
+  try {
+    response = await model.invoke(input);
+  } catch (error: any) {
+    console.error('[Parse Resume] Model invocation error:', {
+      error: error.message,
+      stack: error.stack,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    throw new Error(`AI model invocation failed: ${error.message || 'Unknown error'}`);
+  }
 
   // Debug: log response structure to understand what's being returned
   if (!response || typeof response.content === 'undefined') {
