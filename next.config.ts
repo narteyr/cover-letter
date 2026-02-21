@@ -11,6 +11,15 @@ const nextConfig: NextConfig = {
       ...config.watchOptions,
       ignored: ['**/node_modules', '**/untitled-ui/**', '**/.git/**', '**/.next/**'],
     };
+
+    // Fix pdf-parse trying to access test files during build
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({
+        'pdf-parse': 'commonjs pdf-parse',
+      });
+    }
+
     return config;
   },
 };
