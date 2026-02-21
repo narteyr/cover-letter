@@ -9,6 +9,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { StructuredOutputParser } from "langchain/output_parsers";
 import { z } from "zod";
 import * as mammoth from "mammoth";
+import { parsePdfBuffer } from "@/lib/pdf-parser";
 
 /** Get base URL for OpenAI-compatible API (without /chat/completions path) */
 function getLlamaBaseUrl(): string {
@@ -36,9 +37,8 @@ type ParsedResume = z.infer<typeof ResumeSchema>;
  */
 async function extractTextFromBuffer(buffer: Buffer, fileType: string): Promise<string> {
   if (fileType === "application/pdf") {
-    // Dynamic import to avoid pdf-parse running test code at build time
-    const pdfParse = (await import("pdf-parse")).default;
-    const data = await pdfParse(buffer);
+    // Use server-side wrapper to prevent pdf-parse test code from running
+    const data = await parsePdfBuffer(buffer);
     return data.text;
   } else if (
     fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
