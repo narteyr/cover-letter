@@ -50,3 +50,4 @@ next-env.d.ts
 
 # UI library reference (already copied needed files to src/)
 untitled-ui
+env

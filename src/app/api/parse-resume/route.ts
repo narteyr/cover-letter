@@ -8,8 +8,6 @@ import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StructuredOutputParser } from "langchain/output_parsers";
 import { z } from "zod";
-// @ts-ignore
-import pdfParse from "pdf-parse";
 import * as mammoth from "mammoth";
 
 /** Get base URL for OpenAI-compatible API (without /chat/completions path) */
@@ -38,6 +36,8 @@ type ParsedResume = z.infer<typeof ResumeSchema>;
  */
 async function extractTextFromBuffer(buffer: Buffer, fileType: string): Promise<string> {
   if (fileType === "application/pdf") {
+    // Dynamic import to avoid pdf-parse running test code at build time
+    const pdfParse = (await import("pdf-parse")).default;
     const data = await pdfParse(buffer);
     return data.text;
   } else if (

@@ -9,10 +9,18 @@
     "start": "next start -p 3001",
     "lint": "next lint"
   },
-  "keywords": ["cover-letter", "ai", "openai", "langchain", "resume", "job-application"],
+  "keywords": [
+    "cover-letter",
+    "ai",
+    "openai",
+    "langchain",
+    "resume",
+    "job-application"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@internationalized/date": "^3.11.0",
     "@langchain/core": "^0.3.58",
     "@langchain/openai": "^0.3.16",
     "@tiptap/extension-font-family": "^3.14.0",
@@ -27,17 +35,22 @@
     "jspdf": "^4.2.0",
     "langchain": "^0.3.11",
     "mammoth": "^1.8.0",
+    "motion": "^11.0.0",
     "next": "^16.1.1",
     "openai": "^4.77.3",
     "pdf-parse": "1.1.1",
     "react": "^19.0.0",
+    "react-aria": "^3.31.0",
     "react-aria-components": "^1.13.0",
     "react-dom": "^19.0.0",
+    "react-hotkeys-hook": "^5.2.4",
+    "recharts": "^3.7.0",
     "tailwind-merge": "^2.5.0",
     "zod": "^3.24.1",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@react-types/overlays": "^3.9.3",
     "@tailwindcss/postcss": "^4.2.0",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^22",
