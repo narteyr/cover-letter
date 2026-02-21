@@ -1,0 +1,62 @@
+{
+  "name": "@internaly/cover-letter-generator",
+  "version": "1.0.0",
+  "description": "Open-source AI-powered cover letter generator using OpenAI and LangChain",
+  "private": false,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint"
+  },
+  "keywords": ["cover-letter", "ai", "openai", "langchain", "resume", "job-application"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@langchain/core": "^0.3.58",
+    "@langchain/openai": "^0.3.16",
+    "@tiptap/extension-font-family": "^3.14.0",
+    "@tiptap/extension-font-size": "3.0.0-next.3",
+    "@tiptap/extension-placeholder": "^3.14.0",
+    "@tiptap/extension-text-style": "^3.14.0",
+    "@tiptap/react": "^3.14.0",
+    "@tiptap/starter-kit": "^3.14.0",
+    "@untitledui/icons": "^0.0.19",
+    "clsx": "^2.1.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.0",
+    "langchain": "^0.3.11",
+    "mammoth": "^1.8.0",
+    "next": "^16.1.1",
+    "openai": "^4.77.3",
+    "pdf-parse": "1.1.1",
+    "react": "^19.0.0",
+    "react-aria-components": "^1.13.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.5.0",
+    "zod": "^3.24.1",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^9",
+    "eslint-config-next": "^16.1.1",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^4.2.0",
+    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss-react-aria-components": "^2.0.1",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "pnpm": {
+    "overrides": {
+      "@internationalized/date": "^3.11.0",
+      "@langchain/core": "^0.3.58"
+    }
+  }
+}

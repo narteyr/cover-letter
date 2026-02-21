@@ -1,0 +1,88 @@
+/**
+ * Cover Letter Editor Styles
+ *
+ * Semantic classes emitted by the LLM (cover-letter/generate API):
+ *   .sender-block      — candidate contact details (top right in print)
+ *   .recipient-block   — company / hiring manager address block (left)
+ *   .letter-date       — formatted date line
+ *   .letter-subject    — Re: Application for … line
+ *   .letter-salutation — Dear …,
+ *   .letter-body       — body paragraphs
+ *   .letter-valediction — Yours sincerely / faithfully,
+ *   .letter-signature  — candidate name sign-off
+ */
+
+/* ── Base ── */
+.cover-letter-editor-content {
+    line-height: 1.7;
+    font-family: "Times New Roman", serif;
+    font-size: 11pt;
+    color: #1a1a1a;
+}
+
+.cover-letter-editor-content p {
+    margin-bottom: 0.6em;
+}
+
+.cover-letter-editor-content p:empty {
+    margin-bottom: 0.4em;
+}
+
+.cover-letter-editor-content strong {
+    font-weight: 600;
+}
+
+/* ── Sender block — right-aligned, top of letter ── */
+.cover-letter-editor-content .sender-block {
+    text-align: right;
+    margin-bottom: 1.5em;
+    line-height: 1.5;
+}
+
+.cover-letter-editor-content .sender-block p {
+    margin-bottom: 0.1em;
+}
+
+/* ── Date line ── */
+.cover-letter-editor-content .letter-date {
+    margin-bottom: 1.5em;
+}
+
+/* ── Recipient block — left-aligned ── */
+.cover-letter-editor-content .recipient-block {
+    margin-bottom: 1.5em;
+    line-height: 1.5;
+}
+
+.cover-letter-editor-content .recipient-block p {
+    margin-bottom: 0.1em;
+}
+
+/* ── Subject line ── */
+.cover-letter-editor-content .letter-subject {
+    margin-bottom: 1.2em;
+    font-size: 11pt;
+}
+
+/* ── Salutation ── */
+.cover-letter-editor-content .letter-salutation {
+    margin-bottom: 1em;
+}
+
+/* ── Body paragraphs ── */
+.cover-letter-editor-content .letter-body {
+    margin-bottom: 1em;
+    text-align: justify;
+}
+
+/* ── Valediction ── */
+.cover-letter-editor-content .letter-valediction {
+    margin-top: 1.5em;
+    margin-bottom: 2.5em; /* space for handwritten signature gap */
+}
+
+/* ── Signature name ── */
+.cover-letter-editor-content .letter-signature {
+    font-weight: 600;
+    margin-bottom: 0;
+}
